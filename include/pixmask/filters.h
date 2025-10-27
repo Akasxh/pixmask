@@ -9,7 +9,7 @@
 
 namespace pixmask {
 
-constexpr float kCubicBSplinePole = static_cast<float>(std::sqrt(3.0) - 2.0);
+constexpr float kCubicBSplinePole = -0.2679491924311227f;  // sqrt(3) - 2
 constexpr float kCubicBSplinePrefilterTolerance = 1.0e-5f;
 
 struct CubicPhase {
