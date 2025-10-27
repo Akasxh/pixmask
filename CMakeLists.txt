@@ -11,7 +11,10 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 if(MSVC)
     add_compile_options(/O2)
 else()
-    add_compile_options(-O3 -ffast-math -march=native)
+    add_compile_options(-O3 -ffast-math)
+    if(NOT APPLE)
+        add_compile_options(-march=native)
+    endif()
 endif()
 
 file(GLOB_RECURSE PIXMASK_SOURCES CONFIGURE_DEPENDS
