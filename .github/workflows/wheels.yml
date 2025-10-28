@@ -35,7 +35,7 @@ jobs:
           CIBW_ARCHS_LINUX: x86_64
           CIBW_ARCHS_MACOS: x86_64
           CIBW_ARCHS_WINDOWS: AMD64
-          CIBW_BEFORE_BUILD: pip install --upgrade pip wheel "cmake<3.30" ninja numpy
+          CIBW_BEFORE_BUILD: python -m pip install --upgrade pip wheel "cmake<3.30" ninja numpy
           CIBW_TEST_REQUIRES: numpy
           CIBW_TEST_COMMAND: python -c "import numpy as np, pixmask; x = np.zeros((16,16,3), dtype='uint8'); pixmask.sanitize(x)"
           CIBW_ENVIRONMENT: PIXMASK_BUILD_PYTHON=ON
