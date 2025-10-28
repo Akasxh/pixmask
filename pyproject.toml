@@ -23,6 +23,14 @@ pixmask = "pixmask.__init__:main"
 
 [tool.scikit-build]
 wheel.packages = ["python/pixmask"]
+sdist.exclude = [
+  ".git/", ".github/", ".gitignore", ".gitattributes",
+  ".venv/", ".qa-venv/", "build/", "build-*", "dist/", "dist_ci/", "wheelhouse/",
+  "*.egg-info/", "**/__pycache__/**", "**/*.pyc", ".DS_Store", ".ci_heartbeat"
+]
+wheel.exclude = [
+  "python/pixmask/tests/**", "benchmarks/**", "tools/**", ".github/**"
+]
 
 [tool.scikit-build.cmake]
 build-type = "Release"

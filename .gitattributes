@@ -1,0 +1,10 @@
+.venv/             export-ignore
+.qa-venv/          export-ignore
+build/             export-ignore
+dist/              export-ignore
+dist_ci/           export-ignore
+wheelhouse/        export-ignore
+.github/           export-ignore
+*.pyc              export-ignore
+__pycache__/       export-ignore
+.ci_heartbeat      export-ignore
