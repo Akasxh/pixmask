@@ -1,0 +1,28 @@
+[build-system]
+requires = [
+    "scikit-build-core>=0.5",
+    "pybind11",
+]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "pixmask"
+version = "0.1.1"
+description = "Placeholder pixmask Python bindings"
+readme = "README.md"
+requires-python = ">=3.8"
+authors = [{ name = "pixmask contributors" }]
+license = { file = "LICENSE" }
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: C++",
+]
+
+[project.scripts]
+pixmask = "pixmask.__init__:main"
+
+[tool.scikit-build]
+wheel.packages = ["python/pixmask"]
+
+[tool.scikit-build.cmake]
+build-type = "Release"
