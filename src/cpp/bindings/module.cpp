@@ -39,10 +39,13 @@ sanitize_bytes(nb::bytes input,
     opts.jpeg_quality_lo = jpeg_quality_lo;
     opts.jpeg_quality_hi = jpeg_quality_hi;
 
+    // Pipeline must outlive the memcpy below — result.image.data points
+    // into the Pipeline's arena, which is freed when Pipeline is destroyed.
+    pixmask::Pipeline pipeline(opts);
     pixmask::SanitizeResult result;
     {
         nb::gil_scoped_release release;
-        result = pixmask::sanitize(data, len, opts);
+        result = pipeline.sanitize(data, len);
     }
 
     if (!result.success) {
@@ -56,9 +59,8 @@ sanitize_bytes(nb::bytes input,
     const size_t C = img.channels;
     const size_t n = H * W * C;
 
-    // Copy out of arena into heap-owned buffer (arena resets on next call).
+    // Copy out of arena into heap-owned buffer before pipeline/arena is destroyed.
     auto* out_buf = new uint8_t[n];
-    // Copy row-by-row to handle stride != width*channels.
     for (size_t y = 0; y < H; ++y) {
         const uint8_t* src_row = img.data + y * img.stride;
         uint8_t* dst_row = out_buf + y * W * C;
