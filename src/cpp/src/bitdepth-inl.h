@@ -25,13 +25,12 @@ void ReduceBitDepthRowImpl(uint8_t* HWY_RESTRICT row, size_t count) {
         hn::StoreU(hn::And(v, mask_vec), d, row + i);
     }
 
-    // Tail: remaining pixels that don't fill a full vector.
-    // Use FirstN mask to handle partial vector without overwriting past end.
-    const size_t remaining = count - i;
-    if (remaining > 0) {
-        auto tail_mask = hn::FirstN(d, remaining);
-        auto v = hn::MaskedLoad(tail_mask, d, row + i);
-        hn::BlendedStore(hn::And(v, mask_vec), tail_mask, d, row + i);
+    // Tail: scalar fallback to avoid OOB reads with SIMD loads.
+    // MaskedLoad on AVX2 still reads a full 32-byte vector internally,
+    // which is an OOB read if the buffer is shorter than the vector width.
+    const uint8_t scalar_mask = static_cast<uint8_t>(0xFF << kShift);
+    for (; i < count; ++i) {
+        row[i] &= scalar_mask;
     }
 }
 

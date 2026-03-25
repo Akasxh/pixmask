@@ -1,5 +1,6 @@
 // pixmask nanobind Python bindings.
 // See architecture/CPP_REFERENCE.md section 4 for patterns.
+#include <cstring>
 #include <nanobind/nanobind.h>
 #include <nanobind/ndarray.h>
 #include <nanobind/stl/string.h>

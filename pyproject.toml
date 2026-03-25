@@ -69,3 +69,8 @@ environment = { CMAKE_ARGS = "-DPIXMASK_ARCH=aarch64" }
 select = "*-macosx_arm64"
 environment.CMAKE_ARGS = "-DPIXMASK_ARCH=arm64"
 inherit.environment = "append"
+
+[[tool.cibuildwheel.overrides]]
+select = "*-macosx_x86_64"
+environment.CMAKE_ARGS = "-DPIXMASK_ARCH=x86_64"
+inherit.environment = "append"
