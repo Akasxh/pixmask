@@ -34,6 +34,10 @@ FetchContent_MakeAvailable(highway)
 # ============================================================
 # Core C++ library
 # ============================================================
+# POSITION_INDEPENDENT_CODE required: this static lib gets linked into a
+# shared Python extension module (.so). Without -fPIC, ld fails on Linux.
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
 add_library(pixmask_core STATIC
   src/cpp/src/arena.cpp
   src/cpp/src/validate.cpp

@@ -87,13 +87,13 @@ ImageView decode_image(
 
     if (error_out) *error_out = nullptr;
 
-    return ImageView{
-        .data     = out,
-        .width    = width,
-        .height   = height,
-        .channels = kChannelsRGB,
-        .stride   = stride,
-    };
+    ImageView result{};
+    result.data     = out;
+    result.width    = width;
+    result.height   = height;
+    result.channels = kChannelsRGB;
+    result.stride   = stride;
+    return result;
 }
 
 } // namespace pixmask
