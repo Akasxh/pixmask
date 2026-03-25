@@ -1,0 +1,71 @@
+[build-system]
+requires = ["scikit-build-core>=0.10", "nanobind>=2.0.0"]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "pixmask"
+version = "0.1.0"
+description = "Fast image sanitization for multimodal LLMs"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { file = "LICENSE" }
+authors = [{ name = "Akasxh", email = "drakathakash@gmail.com" }]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: C++",
+    "Topic :: Security",
+    "Topic :: Scientific/Engineering :: Image Processing",
+    "Development Status :: 3 - Alpha",
+]
+
+dependencies = ["numpy>=1.24"]
+
+[project.urls]
+Homepage = "https://github.com/Akasxh/pixmask"
+Repository = "https://github.com/Akasxh/pixmask"
+Issues = "https://github.com/Akasxh/pixmask/issues"
+
+[tool.scikit-build]
+minimum-version = "build-system.requires"
+build-dir = "build/{wheel_tag}"
+wheel.packages = ["python/pixmask"]
+
+[[tool.scikit-build.overrides]]
+if.platform-machine = "^x86_64$"
+cmake.args = ["-DPIXMASK_ARCH=x86_64"]
+
+[[tool.scikit-build.overrides]]
+if.platform-machine = "^aarch64$"
+cmake.args = ["-DPIXMASK_ARCH=aarch64"]
+
+[[tool.scikit-build.overrides]]
+if.platform-machine = "^arm64$"
+cmake.args = ["-DPIXMASK_ARCH=arm64"]
+
+[tool.cibuildwheel]
+build-verbosity = 1
+test-requires = ["pytest", "numpy"]
+test-command = "pytest {project}/src/tests/python -x -q"
+skip = "pp* *-win32 *-manylinux_i686"
+
+[tool.cibuildwheel.macos.environment]
+MACOSX_DEPLOYMENT_TARGET = "10.14"
+
+[[tool.cibuildwheel.overrides]]
+select = "*-manylinux_x86_64 *-musllinux_x86_64"
+environment = { CMAKE_ARGS = "-DPIXMASK_ARCH=x86_64" }
+
+[[tool.cibuildwheel.overrides]]
+select = "*-manylinux_aarch64 *-musllinux_aarch64"
+environment = { CMAKE_ARGS = "-DPIXMASK_ARCH=aarch64" }
+
+[[tool.cibuildwheel.overrides]]
+select = "*-macosx_arm64"
+environment.CMAKE_ARGS = "-DPIXMASK_ARCH=arm64"
+inherit.environment = "append"

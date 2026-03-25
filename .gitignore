@@ -1,0 +1,36 @@
+# Build
+build/
+build-*/
+dist/
+wheelhouse/
+*.egg-info/
+*.so
+*.dylib
+*.dll
+*.pyd
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.eggs/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Packaging
+*.whl
+*.tar.gz
+
+# Working docs (keep research/architecture out of releases)
+PROGRESS.md
