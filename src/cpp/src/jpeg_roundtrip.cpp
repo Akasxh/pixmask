@@ -18,8 +18,16 @@
 // OS entropy shim
 // ---------------------------------------------------------------------------
 #if defined(__linux__)
-#  include <sys/random.h>
-#  define PIXMASK_HAVE_GETRANDOM 1
+// Use syscall directly — sys/random.h is unavailable on manylinux2014 (glibc 2.17).
+#  include <sys/syscall.h>
+#  include <unistd.h>
+#  include <cerrno>
+#  ifdef SYS_getrandom
+#    define PIXMASK_HAVE_GETRANDOM 1
+#  else
+#    include <fcntl.h>
+#    define PIXMASK_HAVE_DEV_URANDOM 1
+#  endif
 #elif defined(__APPLE__) || defined(__FreeBSD__)
 #  include <sys/random.h>
 #  define PIXMASK_HAVE_GETENTROPY 1
@@ -78,7 +86,13 @@ void jpeg_write_cb(void* context, void* chunk, int size) {
 
 bool os_random_bytes(uint8_t* buf, size_t n) noexcept {
 #if defined(PIXMASK_HAVE_GETRANDOM)
-    return ::getrandom(buf, n, 0) == static_cast<ssize_t>(n);
+    return ::syscall(SYS_getrandom, buf, n, 0) == static_cast<long>(n);
+#elif defined(PIXMASK_HAVE_DEV_URANDOM)
+    int fd = ::open("/dev/urandom", O_RDONLY | O_CLOEXEC);
+    if (fd < 0) return false;
+    auto r = ::read(fd, buf, n);
+    ::close(fd);
+    return r == static_cast<ssize_t>(n);
 #elif defined(PIXMASK_HAVE_GETENTROPY)
     return ::getentropy(buf, n) == 0;
 #elif defined(PIXMASK_HAVE_BCRYPT)
