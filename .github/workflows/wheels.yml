@@ -23,15 +23,10 @@ jobs:
         with:
           submodules: true
 
-      - name: Set up QEMU (Linux aarch64 cross-compile)
-        if: runner.os == 'Linux'
-        uses: docker/setup-qemu-action@v3
-        with:
-          platforms: arm64
-
       - uses: pypa/cibuildwheel@v2.21
         env:
-          CIBW_ARCHS_LINUX: x86_64 aarch64
+          # aarch64 via QEMU takes 60+ min; use native ARM runners in v0.2
+          CIBW_ARCHS_LINUX: x86_64
           CIBW_ARCHS_MACOS: arm64 x86_64
           CIBW_ARCHS_WINDOWS: AMD64
 
