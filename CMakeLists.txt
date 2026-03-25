@@ -99,15 +99,8 @@ if(SKBUILD)
 
   install(TARGETS pixmask_ext LIBRARY DESTINATION pixmask)
 
-  nanobind_add_stub(
-    pixmask_ext_stub
-    INSTALL_TIME
-    MODULE pixmask_ext
-    OUTPUT pixmask_ext.pyi
-    PYTHON_PATH "."
-    MARKER_FILE py.typed
-  )
-  install(FILES "${CMAKE_CURRENT_BINARY_DIR}/py.typed" DESTINATION pixmask)
+  # Type stubs are hand-maintained in python/pixmask/__init__.pyi.
+  # py.typed marker is committed in python/pixmask/py.typed.
 endif()
 
 # ============================================================
